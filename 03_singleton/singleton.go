@@ -6,15 +6,14 @@ import "sync"
 type Singleton struct{}
 
 var singletonInst *Singleton
-var singletonInstLock sync.Mutex
+var once sync.Once
 
 //GetInstance 用于获取单例模式对象
 func GetInstance() *Singleton {
-	if singletonInst == nil {
-		singletonInstLock.Lock()
-		if singletonInst == nil {
-			singletonInst = &Singleton{}
-		}
-	}
+
+	once.Do(func() {
+		singletonInst = &Singleton{}
+	})
+
 	return singletonInst
 }
